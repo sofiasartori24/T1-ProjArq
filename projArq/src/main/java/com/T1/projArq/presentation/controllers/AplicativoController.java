@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/aplicativos")
@@ -24,16 +25,18 @@ public class AplicativoController {
         this.aplicativoService = aplicativoService;
     }
 
-    @PostMapping
-    public ResponseEntity<Aplicativo> createAplicativo(@RequestBody AplicativoDTO aplicativoDTO) {
-        Aplicativo aplicativo = aplicativoService.createAplicativo(aplicativoDTO.getCodigo(), aplicativoDTO.getNome(), aplicativoDTO.getCustoMensal());
-        return new ResponseEntity<>(aplicativo, HttpStatus.CREATED);
-    }
-
     @GetMapping
     public  ResponseEntity<List<Aplicativo>> getAllAplicativos() {
         List<Aplicativo> aplicativos = aplicativoService.getAllAplicativos();
         return new ResponseEntity<>(aplicativos, HttpStatus.OK);
+    }
+    @PostMapping("/atualizacusto/{idAplicativo}")
+    public ResponseEntity<Aplicativo> atualizarCusto(@PathVariable Long idAplicativo, @RequestBody Map<String, Double> request) {
+        Double novoCusto = request.get("custo");
+
+        Aplicativo aplicativoAtualizado = aplicativoService.updateCusto(idAplicativo, novoCusto);
+
+        return ResponseEntity.ok(aplicativoAtualizado);
     }
 }
 

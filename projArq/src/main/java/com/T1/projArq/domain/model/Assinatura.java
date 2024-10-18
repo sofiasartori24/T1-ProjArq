@@ -8,12 +8,15 @@ public class Assinatura {
     private Date fimVigencia;
     private List<Pagamento> pagamentos;
     private Aplicativo aplicativo;
+    private Cliente cliente;
 
-    public Assinatura(Long codigo, Date inicioVigencia, Aplicativo aplicativo) {
+    public Assinatura(Long codigo, Date inicioVigencia, Date fimVigencia, Aplicativo aplicativo, Cliente cliente) {
         this.codigo = codigo;
         this.inicioVigencia = inicioVigencia;
         this.pagamentos = new ArrayList<>();
+        this.fimVigencia = fimVigencia;
         this.aplicativo = aplicativo;
+        this.cliente = cliente;
     }
 
     public Long getCodigo() {
@@ -30,6 +33,7 @@ public class Assinatura {
 
     public Aplicativo getAplicativo() { return aplicativo; }
 
+    public Cliente getCliente() { return cliente; }
     public void setFimVigencia(Date fimVigencia) {
         this.fimVigencia = fimVigencia;
     }
@@ -44,5 +48,9 @@ public class Assinatura {
 
     public void setPagamentos(List<Pagamento> pagamentosByAssinaturaId) {
         this.pagamentos = pagamentosByAssinaturaId;
+    }
+
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
     }
 }

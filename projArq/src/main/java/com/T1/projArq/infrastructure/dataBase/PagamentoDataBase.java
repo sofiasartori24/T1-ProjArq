@@ -2,12 +2,14 @@ package com.T1.projArq.infrastructure.dataBase;
 
 import com.T1.projArq.domain.model.Aplicativo;
 import com.T1.projArq.domain.model.Assinatura;
+import com.T1.projArq.domain.model.Cliente;
 import com.T1.projArq.domain.model.Pagamento;
 import com.T1.projArq.domain.repository.IPagamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,28 +24,17 @@ public class PagamentoDataBase implements IPagamentoRepository {
 
     @Override
     public Pagamento create(Long codigo, Double valorPago, Date dataPagamento, String promocao, Long idAssinatura) {
-        String sql = "INSERT INTO pagamentos (codigo, valorPago, dataPagamento, promocao, idAssinatura) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, codigo, valorPago, dataPagamento, promocao, idAssinatura);
+        String sql = "INSERT INTO pagamentos (codigo, valor_pago, data_pagamento, promocao, assinatura_codigo) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, codigo, valorPago, new java.sql.Date(dataPagamento.getTime()), promocao, idAssinatura);
 
         Assinatura assinatura = getAssinaturaById(idAssinatura);
-
         return new Pagamento(codigo, valorPago, dataPagamento, promocao, assinatura);
     }
 
+
     @Override
     public List<Pagamento> getAll() {
-        String sql = "SELECT * FROM pagamentos";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Long codigo = rs.getLong("codigo");
-            double valorPago = rs.getDouble("valorPago");
-            Date dataPagamento = rs.getDate("dataPagamento");
-            String promocao = rs.getString("promocao");
-            Long idAssinatura = rs.getLong("idAssinatura");
-
-            Assinatura assinatura = getAssinaturaById(idAssinatura);
-
-            return new Pagamento(codigo, valorPago, dataPagamento, promocao, assinatura);
-        });
+        return new ArrayList<>();
     }
 
     @Override
@@ -60,21 +51,28 @@ public class PagamentoDataBase implements IPagamentoRepository {
     public void delete(Long codigo) {
 
     }
-
     private Assinatura getAssinaturaById(Long idAssinatura) {
         String sql = "SELECT * FROM assinaturas WHERE codigo = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{idAssinatura}, (rs, rowNum) -> {
             Long codigo = rs.getLong("codigo");
             Date inicioVigencia = rs.getDate("inicio_vigencia");
             Date fimVigencia = rs.getDate("fim_vigencia");
-            Long aplicativoId = rs.getLong("aplicativo_id");
+            Long aplicativoId = rs.getLong("aplicativo_codigo");
+            Long clienteId = rs.getLong("cliente_codigo");
 
             Aplicativo aplicativo = getAplicativoById(aplicativoId);
+            Cliente cliente = getClienteById(clienteId);
 
-            Assinatura assinatura = new Assinatura(codigo, inicioVigencia, aplicativo);
-            assinatura.setFimVigencia(fimVigencia);
+            return new Assinatura(codigo, inicioVigencia, fimVigencia, aplicativo, cliente);
+        });
+    }
 
-            return assinatura;
+    private Cliente getClienteById(Long clienteId) {
+        String sql = "SELECT * FROM clientes WHERE codigo = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{clienteId}, (rs, rowNum) -> {
+            String nome = rs.getString("nome");
+            String email = rs.getString("email");
+            return new Cliente(clienteId, nome, email);
         });
     }
 
@@ -83,9 +81,11 @@ public class PagamentoDataBase implements IPagamentoRepository {
         return jdbcTemplate.queryForObject(sql, new Object[]{aplicativoId}, (rs, rowNum) -> {
             Long codigo = rs.getLong("codigo");
             String nome = rs.getString("nome");
-            double custo = rs.getDouble("custo");
+            Double custoMensal = rs.getDouble("custo_mensal");
 
-            return new Aplicativo(codigo, nome, custo);
+            return new Aplicativo(codigo, nome, custoMensal);
         });
     }
+
+
 }

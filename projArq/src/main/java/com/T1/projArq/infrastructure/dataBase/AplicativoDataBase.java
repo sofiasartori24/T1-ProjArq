@@ -21,7 +21,7 @@ public class AplicativoDataBase implements IAplicativoRepository {
 
     @Override
     public Aplicativo create(Long codigo, String nome, Double custoMensal) {
-        String sql = "INSERT INTO aplicativos (codigo, nome, custo_mensal) VALUES (?, ?, ?)\n";
+        String sql = "INSERT INTO aplicativos (codigo, nome, custo_mensal) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, codigo, nome, custoMensal);
         return new Aplicativo(codigo, nome, custoMensal);
     }
@@ -32,7 +32,7 @@ public class AplicativoDataBase implements IAplicativoRepository {
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Long codigo = rs.getLong("codigo");
             String nome = rs.getString("nome");
-            Double custoMensal = rs.getDouble("custoMensal");
+            Double custoMensal = rs.getDouble("custo_mensal");
 
             return new Aplicativo(codigo, nome, custoMensal);
         });
@@ -43,14 +43,14 @@ public class AplicativoDataBase implements IAplicativoRepository {
         String sql = "SELECT * FROM aplicativos WHERE codigo = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{codigo}, (rs, rowNum) -> {
             String nome = rs.getString("nome");
-            Double custoMensal = rs.getDouble("custoMensal");
+            Double custoMensal = rs.getDouble("custo_mensal");
             return new Aplicativo(codigo, nome, custoMensal);
         });
     }
 
     @Override
     public void update(Aplicativo aplicativo) {
-        String sql = "UPDATE aplicativos SET nome = ?, custoMensal = ? WHERE codigo = ?";
+        String sql = "UPDATE aplicativos SET nome = ?, custo_mensal = ? WHERE codigo = ?";
         jdbcTemplate.update(sql, aplicativo.getNome(), aplicativo.getCustoMensal(), aplicativo.getCodigo());
     }
 
@@ -59,19 +59,5 @@ public class AplicativoDataBase implements IAplicativoRepository {
         String sql = "DELETE FROM aplicativos WHERE codigo = ?";
         jdbcTemplate.update(sql, codigo);
     }
-
-    public List<Assinatura> getAssinaturasByAplicativoId(Long codigo) {
-        String sql = "SELECT * FROM assinaturas WHERE aplicativo_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{codigo}, (rs, rowNum) -> {
-            Long assinaturaCodigo = rs.getLong("codigo");
-            Date inicioVigencia = rs.getDate("inicio_vigencia");
-            Date fimVigencia = rs.getDate("fim_vigencia");
-
-            Aplicativo aplicativo = getById(codigo);
-
-            Assinatura assinatura = new Assinatura(assinaturaCodigo, inicioVigencia, aplicativo);
-
-            return assinatura;
-        });
-    }
+    
 }

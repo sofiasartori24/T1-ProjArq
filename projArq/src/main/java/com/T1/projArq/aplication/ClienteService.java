@@ -46,17 +46,5 @@ public class ClienteService {
         clienteRepository.delete(codigo);
     }
 
-    public Assinatura addAssinaturaToCliente(Long clienteId, Long aplicativoId, Date inicioVigencia) {
-        Cliente cliente = clienteRepository.getById(clienteId);
-        Aplicativo aplicativo = aplicativoRepository.getById(aplicativoId);
-        
-        Assinatura assinatura = new Assinatura(null, inicioVigencia, aplicativo);
-        assinaturaRepository.create(assinatura.getCodigo(), inicioVigencia, aplicativo);
-        
-        cliente.getAssinaturas().add(assinatura);
-        clienteRepository.update(cliente);
-        
-        return assinatura;
-    }
 }
 

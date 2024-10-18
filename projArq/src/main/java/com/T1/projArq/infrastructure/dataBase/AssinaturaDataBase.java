@@ -2,6 +2,7 @@ package com.T1.projArq.infrastructure.dataBase;
 
 import com.T1.projArq.domain.model.Aplicativo;
 import com.T1.projArq.domain.model.Assinatura;
+import com.T1.projArq.domain.model.Cliente;
 import com.T1.projArq.domain.model.Pagamento;
 import com.T1.projArq.domain.repository.IAssinaturaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,13 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
     }
 
     @Override
-    public Assinatura create(Long codigo, Date inicioVigencia, Aplicativo aplicativo) {
-        String sql = "INSERT INTO assinaturas (codigo, inicioVigencia, fimVigencia, aplicativo_id) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, codigo, inicioVigencia, null, aplicativo.getCodigo());
+    public Assinatura create(Assinatura assinatura, Cliente cliente) {
+        String sql = "INSERT INTO assinaturas (inicio_vigencia, fim_vigencia, aplicativo_codigo, cliente_codigo) VALUES (?, ?, ?, ?)";
 
-        return new Assinatura(codigo, inicioVigencia, aplicativo);
+        jdbcTemplate.update(sql, assinatura.getInicioVigencia(), assinatura.getFimVigencia(), assinatura.getAplicativo().getCodigo(), cliente.getCodigo());
+        Long codigoAssinatura = jdbcTemplate.queryForObject("SELECT LIMIT 1 CODIGO FROM assinaturas ORDER BY CODIGO DESC ", Long.class);
+        assinatura.setCodigo(codigoAssinatura);
+        return assinatura;
     }
 
     @Override
@@ -33,14 +36,15 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
         String sql = "SELECT * FROM assinaturas";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Long codigo = rs.getLong("codigo");
-            Date inicioVigencia = rs.getDate("inicioVigencia");
-            Date fimVigencia = rs.getDate("fimVigencia");
-            Long aplicativoId = rs.getLong("aplicativo_id");
+            Date inicioVigencia = rs.getDate("inicio_vigencia");
+            Date fimVigencia = rs.getDate("fim_vigencia");
+            Long aplicativoId = rs.getLong("aplicativo_codigo");
+            Long clienteId = rs.getLong("cliente_codigo");
 
-            Aplicativo aplicativo = getAplicativoById(aplicativoId); 
-            Assinatura assinatura = new Assinatura(codigo, inicioVigencia, aplicativo);
+            Cliente cliente = getClienteById(clienteId);
+            Aplicativo aplicativo = getAplicativoById(aplicativoId);
+            Assinatura assinatura = new Assinatura(codigo, inicioVigencia, fimVigencia, aplicativo, cliente);
             assinatura.setFimVigencia(fimVigencia);
-            //assinatura.setPagamentos(getPagamentosByAssinaturaId(codigo));
 
             return assinatura;
         });
@@ -50,14 +54,15 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
     public Assinatura getById(Long codigo) {
         String sql = "SELECT * FROM assinaturas WHERE codigo = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{codigo}, (rs, rowNum) -> {
-            Date inicioVigencia = rs.getDate("inicioVigencia");
-            Date fimVigencia = rs.getDate("fimVigencia");
-            Long aplicativoId = rs.getLong("aplicativo_id");
+            Date inicioVigencia = rs.getDate("inicio_vigencia");
+            Date fimVigencia = rs.getDate("fim_vigencia");
+            Long aplicativoId = rs.getLong("aplicativo_codigo");
+            Long clienteId = rs.getLong("cliente_codigo");
 
+            Cliente cliente = getClienteById(clienteId);
             Aplicativo aplicativo = getAplicativoById(aplicativoId);
-            Assinatura assinatura = new Assinatura(codigo, inicioVigencia, aplicativo);
+            Assinatura assinatura = new Assinatura(codigo, inicioVigencia, fimVigencia, aplicativo, cliente);
             assinatura.setFimVigencia(fimVigencia);
-            //assinatura.setPagamentos(getPagamentosByAssinaturaId(codigo));
 
             return assinatura;
         });
@@ -65,8 +70,8 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
 
     @Override
     public void update(Assinatura assinatura) {
-        String sql = "UPDATE assinaturas SET inicioVigencia = ?, fimVigencia = ?, aplicativo_id = ? WHERE codigo = ?";
-        jdbcTemplate.update(sql, assinatura.getInicioVigencia(), assinatura.getFimVigencia(), assinatura.getAplicativo().getCodigo(), assinatura.getCodigo());
+        String sql = "UPDATE assinaturas SET inicio_vigencia = ?, fim_vigencia = ?, aplicativo_codigo = ?, cliente_codigo = ? WHERE codigo = ?";
+        jdbcTemplate.update(sql, assinatura.getInicioVigencia(), assinatura.getFimVigencia(), assinatura.getAplicativo().getCodigo(), assinatura.getCliente().getCodigo(), assinatura.getCodigo());
     }
 
     @Override
@@ -80,17 +85,28 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
         return jdbcTemplate.queryForObject(sql, new Object[]{aplicativoId}, (rs, rowNum) -> {
             Long codigo = rs.getLong("codigo");
             String nome = rs.getString("nome");
-            double custo = rs.getDouble("custo");
+            double custo = rs.getDouble("custo_mensal");
 
             return new Aplicativo(codigo, nome, custo);
         });
     }
+
+    private Cliente getClienteById(Long clienteId) {
+        String sql = "SELECT * FROM clientes WHERE codigo = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{clienteId}, (rs, rowNum) -> {
+            String nome = rs.getString("nome");
+            String email = rs.getString("email");
+
+            return new Cliente(clienteId, nome, email);
+        });
+    }
+
     private List<Pagamento> getPagamentosByAssinaturaId(Long assinaturaId) {
-        String sql = "SELECT * FROM pagamentos WHERE assinatura_id = ?";
+        String sql = "SELECT * FROM pagamentos WHERE assinatura_codigo = ?";
         return jdbcTemplate.query(sql, new Object[]{assinaturaId}, (rs, rowNum) -> {
             Long codigo = rs.getLong("codigo");
-            double valorPago = rs.getDouble("valorPago");
-            Date dataPagamento = rs.getDate("dataPagamento");
+            double valorPago = rs.getDouble("valor_pago");
+            Date dataPagamento = rs.getDate("data_pagamento");
             String promocao = rs.getString("promocao");
 
             Assinatura assinatura = getAssinaturaById(assinaturaId);
@@ -99,18 +115,17 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
     }
 
     public Assinatura getAssinaturaById(Long id) {
-        String sql = "SELECT * FROM assinaturas WHERE id = ?";
+        String sql = "SELECT * FROM assinaturas WHERE codigo = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, rowNum) -> {
             Long codigo = rs.getLong("codigo");
             Date inicioVigencia = rs.getDate("inicio_vigencia");
             Date fimVigencia = rs.getDate("fim_vigencia");
-            Long aplicativoId = rs.getLong("aplicativo_id");
+            Long aplicativoId = rs.getLong("aplicativo_codigo");
+            Long clienteId = rs.getLong("cliente_codigo");
 
+            Cliente cliente = getClienteById(clienteId);
             Aplicativo aplicativo = getAplicativoById(aplicativoId);
-            return new Assinatura(codigo, inicioVigencia, aplicativo);
+            return new Assinatura(codigo, inicioVigencia, fimVigencia, aplicativo, cliente);
         });
     }
-
-
-
 }

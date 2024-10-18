@@ -25,7 +25,7 @@ public class ClienteDataBase implements IClienteRepository {
     public Cliente create(Long codigo, String nome, String email) {
         String sql = "INSERT INTO clientes (codigo, nome, email) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, codigo, nome, email);
-        
+
         return new Cliente(codigo, nome, email);
     }
 
@@ -73,8 +73,9 @@ public class ClienteDataBase implements IClienteRepository {
             Date fimVigencia = rs.getDate("fim_vigencia");
             Long idAplicativo = rs.getLong("aplicativo_id");
 
+            Cliente cliente = getById(codigoCliente);
             Aplicativo aplicativo = getAplicativoById(idAplicativo);
-            Assinatura assinatura = new Assinatura(codigo, inicioVigencia, aplicativo);
+            Assinatura assinatura = new Assinatura(codigo, inicioVigencia, fimVigencia, aplicativo, cliente);
             assinatura.setFimVigencia(fimVigencia);
             assinatura.setPagamentos(getPagamentosByAssinaturaId(codigo));
 
@@ -111,9 +112,11 @@ public class ClienteDataBase implements IClienteRepository {
             Date inicioVigencia = rs.getDate("inicio_vigencia");
             Date fimVigencia = rs.getDate("fim_vigencia");
             Long aplicativoId = rs.getLong("aplicativo_id");
+            Long clienteId = rs.getLong("cliente_id");
 
+            Cliente cliente = getById(clienteId);
             Aplicativo aplicativo = getAplicativoById(aplicativoId);
-            return new Assinatura(codigo, inicioVigencia, aplicativo);
+            return new Assinatura(codigo, inicioVigencia, fimVigencia, aplicativo, cliente);
         });
     }
 }

@@ -24,36 +24,10 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    // Criar um cliente
-    @PostMapping
-    public ResponseEntity<Cliente> createCliente(@RequestBody ClienteDTO clienteDTO) {
-        Cliente cliente = clienteService.createCliente(clienteDTO.getCodigo(), clienteDTO.getNome(), clienteDTO.getEmail());
-        return new ResponseEntity<>(cliente, HttpStatus.CREATED);
-    }
-
     @GetMapping
     public ResponseEntity<List<Cliente>> getAllClientes() {
         List<Cliente> clientes = clienteService.getAllClientes();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Cliente> getById(@PathVariable("id") Long codigo) {
-        Cliente cliente = clienteService.getById(codigo);
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCliente(@PathVariable("id") Long codigo, @RequestBody ClienteDTO clienteDTO) {
-        Cliente cliente = new Cliente(codigo, clienteDTO.getNome(), clienteDTO.getEmail());
-        clienteService.updateCliente(cliente);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCliente(@PathVariable("id") Long codigo) {
-        clienteService.deleteCliente(codigo);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
 

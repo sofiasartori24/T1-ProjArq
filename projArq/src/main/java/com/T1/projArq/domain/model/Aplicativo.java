@@ -27,4 +27,8 @@ public class Aplicativo {
     public Double getCustoMensal() {
         return this.custoMensal;
     }
+
+    public void setCustoMensal(Double custoMensal) {
+        this.custoMensal = custoMensal;
+    }
 }

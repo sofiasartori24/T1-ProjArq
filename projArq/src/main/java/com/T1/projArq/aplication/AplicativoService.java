@@ -23,4 +23,13 @@ public class AplicativoService {
         return this.aplicativoRepository.getAll();
     }
 
+    public Aplicativo getById(Long codigo) { return this.aplicativoRepository.getById(codigo); }
+
+    public Aplicativo updateCusto(Long codigo, Double custoMensal) {
+        Aplicativo aplicativo = aplicativoRepository.getById(codigo);
+        aplicativo.setCustoMensal(custoMensal);
+        this.aplicativoRepository.update(aplicativo);
+        return aplicativo;
+    }
+
 }
