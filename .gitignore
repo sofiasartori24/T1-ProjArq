@@ -1,24 +1,78 @@
-# Compiled class file
+# MacOS
+.DS_Store
+
+# Java
 *.class
-
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
 *.jar
 *.war
-*.nar
 *.ear
-*.zip
-*.tar.gz
-*.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Gradle
+.gradle/
+build/
+
+# Spring Boot
+spring-boot.log
+
+# Logs
+*.log
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.c9/
+.settings/
+bin/
+tmp/
+
+# VS Code
+.vscode/
+
+# Generated files
+*.swp
+*.swo
+
+# OS-specific files
+Thumbs.db
+*.DS_Store
+
+# Temporary files
+*.tmp
+*.bak
+*.old
+*.orig
+*.rej
+*~
+
+# Test reports
+test-output/
+
+# Lombok generated files
+.lombok/
+
+# Node.js (if applicable for frontend builds)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+
+# System files
+*.pyc
+__pycache__/
