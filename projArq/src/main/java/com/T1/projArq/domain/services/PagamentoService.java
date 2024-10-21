@@ -74,7 +74,7 @@ public class PagamentoService {
 
         // Cria o pagamento e armazena no repositório
         Pagamento pagamento = new Pagamento(assinaturaId, valorPago, dataPagamento, promocao, assinatura);
-        pagamentoRepository.create(pagamento);
+        pagamentoRepository.create(assinaturaId, valorPago, dataPagamento, promocao, assinatura.getCodigo());
 
         return pagamento;
     }

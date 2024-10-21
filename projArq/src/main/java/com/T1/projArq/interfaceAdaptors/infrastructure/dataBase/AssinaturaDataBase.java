@@ -1,4 +1,4 @@
-package com.T1.projArq.infrastructure.dataBase;
+package com.T1.projArq.interfaceAdaptors.infrastructure.dataBase;
 
 import com.T1.projArq.domain.model.Aplicativo;
 import com.T1.projArq.domain.model.Assinatura;
@@ -26,8 +26,8 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
         String sql = "INSERT INTO assinaturas (inicio_vigencia, fim_vigencia, aplicativo_codigo, cliente_codigo) VALUES (?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, assinatura.getInicioVigencia(), assinatura.getFimVigencia(), assinatura.getAplicativo().getCodigo(), cliente.getCodigo());
-        Long codigoAssinatura = jdbcTemplate.queryForObject("SELECT LIMIT 1 CODIGO FROM assinaturas ORDER BY CODIGO DESC ", Long.class);
-        assinatura.setCodigo(codigoAssinatura);
+//        Long codigoAssinatura = jdbcTemplate.queryForObject("SELECT LIMIT 1 CODIGO FROM assinaturas ORDER BY CODIGO DESC ", Long.class);
+//        assinatura.setCodigo(codigoAssinatura);
         return assinatura;
     }
 

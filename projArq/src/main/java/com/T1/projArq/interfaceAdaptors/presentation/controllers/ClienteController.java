@@ -1,4 +1,4 @@
-package com.T1.projArq.presentation.controllers;
+package com.T1.projArq.interfaceAdaptors.presentation.controllers;
 
 import com.T1.projArq.aplication.ClienteService;
 import com.T1.projArq.aplication.dto.ClienteDTO;
