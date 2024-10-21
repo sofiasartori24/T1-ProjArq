@@ -30,6 +30,8 @@ public class AplicativoController {
         List<Aplicativo> aplicativos = aplicativoService.getAllAplicativos();
         return new ResponseEntity<>(aplicativos, HttpStatus.OK);
     }
+
+    // Cria um aplicativo
     @PostMapping("/atualizacusto/{idAplicativo}")
     public ResponseEntity<Aplicativo> atualizarCusto(@PathVariable Long idAplicativo, @RequestBody Map<String, Double> request) {
         Double novoCusto = request.get("custo");
