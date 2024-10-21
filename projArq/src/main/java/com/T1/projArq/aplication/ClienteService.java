@@ -26,22 +26,27 @@ public class ClienteService {
         this.aplicativoRepository = aplicativoRepository;
     }
 
+    // Cria um cliente
     public Cliente createCliente(Long codigo, String nome, String email) {
         return clienteRepository.create(codigo, nome, email);
     }
 
+    // Recupera todos os clientes
     public List<Cliente> getAllClientes() {
         return clienteRepository.getAll();
     }
 
+    // Recupera um cliente por id
     public Cliente getById(Long codigo) {
         return clienteRepository.getById(codigo);
     }
 
+    // Atualiza o cliente
     public void updateCliente(Cliente cliente) {
         clienteRepository.update(cliente);
     }
 
+    // Deleta um cliente
     public void deleteCliente(Long codigo) {
         clienteRepository.delete(codigo);
     }
