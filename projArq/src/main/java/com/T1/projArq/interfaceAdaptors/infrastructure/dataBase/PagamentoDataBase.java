@@ -7,8 +7,11 @@ import com.T1.projArq.domain.model.Pagamento;
 import com.T1.projArq.domain.repository.IPagamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,34 +26,31 @@ public class PagamentoDataBase implements IPagamentoRepository {
     }
 
     @Override
-    public Pagamento create(Long codigo, Double valorPago, Date dataPagamento, String promocao, Long idAssinatura) {
-        String sql = "INSERT INTO pagamentos (codigo, valor_pago, data_pagamento, promocao, assinatura_codigo) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, codigo, valorPago, new java.sql.Date(dataPagamento.getTime()), promocao, idAssinatura);
+    public Pagamento create(Double valorPago, Date dataPagamento, String promocao, Long idAssinatura) {
+        String sql = "INSERT INTO pagamentos (valor_pago, data_pagamento, promocao, assinatura_codigo) VALUES (?, ?, ?, ?)";
 
+        // Criar um KeyHolder para armazenar a chave gerada
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        // Executar a inserção e capturar a chave gerada
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[] {"codigo"});
+            ps.setDouble(1, valorPago);
+            ps.setDate(2, new java.sql.Date(dataPagamento.getTime()));
+            ps.setString(3, promocao);
+            ps.setLong(4, idAssinatura);
+            return ps;
+        }, keyHolder);
+
+        // Recuperar o código gerado do pagamento
+        Long codigoPagamento = keyHolder.getKey().longValue();
+
+        // Obter a assinatura associada ao pagamento
         Assinatura assinatura = getAssinaturaById(idAssinatura);
-        return new Pagamento(codigo, valorPago, dataPagamento, promocao, assinatura);
+
+        return new Pagamento(codigoPagamento, valorPago, dataPagamento, promocao, assinatura);
     }
 
-
-    @Override
-    public List<Pagamento> getAll() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public Pagamento getById(Long codigo) {
-        return null;
-    }
-
-    @Override
-    public void update(Pagamento pagamento) {
-
-    }
-
-    @Override
-    public void delete(Long codigo) {
-
-    }
     private Assinatura getAssinaturaById(Long idAssinatura) {
         String sql = "SELECT * FROM assinaturas WHERE codigo = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{idAssinatura}, (rs, rowNum) -> {
@@ -66,7 +66,6 @@ public class PagamentoDataBase implements IPagamentoRepository {
             return new Assinatura(codigo, inicioVigencia, fimVigencia, aplicativo, cliente);
         });
     }
-
     private Cliente getClienteById(Long clienteId) {
         String sql = "SELECT * FROM clientes WHERE codigo = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{clienteId}, (rs, rowNum) -> {

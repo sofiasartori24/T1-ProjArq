@@ -31,7 +31,7 @@ CREATE TABLE assinaturas (
 
 -- Criação da tabela Pagamento
 CREATE TABLE pagamentos (
-                            codigo BIGINT PRIMARY KEY,
+                            codigo BIGINT PRIMARY KEY AUTO_INCREMENT,
                             valor_pago DOUBLE NOT NULL,
                             data_pagamento DATE NOT NULL,
                             promocao VARCHAR(255),
@@ -76,8 +76,5 @@ INSERT INTO assinaturas (inicio_vigencia, fim_vigencia, aplicativo_codigo, clien
 ('2024-05-01', '2025-05-01', 5, 5),
 ('2024-05-01', '2024-06-01', 5, 5),
 ('2024-06-01', '2025-06-01', 5, 6),
-('2024-07-01', '2025-07-01', 5, 7),
-('2024-08-01', '2025-08-01', 5, 8),
-('2024-09-01', '2025-09-01', 5, 9),
-('2024-10-01', '2025-10-01', 5, 10),
-('2024-11-01', '2025-11-01', 5, 11);
+('2024-07-01', '2025-07-01', 5, 7)
+

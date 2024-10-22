@@ -40,16 +40,6 @@ public class ClienteService {
         return clienteRepository.getById(codigo);
     }
 
-    // Atualiza o cliente
-    public void updateCliente(Cliente cliente) {
-        clienteRepository.update(cliente);
-    }
-
-    // Deleta um cliente
-    public void deleteCliente(Long codigo) {
-        clienteRepository.delete(codigo);
-    }
-
     private ClienteDTO toDTO(Cliente cliente) {
         return new ClienteDTO(cliente.getCodigo(), cliente.getNome(), cliente.getEmail(), cliente.getAssinaturas());
     }

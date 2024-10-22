@@ -3,13 +3,16 @@ package com.T1.projArq.application.dto;
 import com.T1.projArq.domain.model.Aplicativo;
 import com.T1.projArq.domain.model.Cliente;
 import com.T1.projArq.domain.model.Pagamento;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 import java.util.List;
 
 public class AssinaturaDTO {
     private Long codigo;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date inicioVigencia;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date fimVigencia;
     private List<Pagamento> pagamentos;
     private Aplicativo aplicativo;

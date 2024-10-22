@@ -174,16 +174,7 @@ public class AssinaturaService {
 
         return assinaturas.stream()
                 .filter(assinatura -> assinatura.getCliente().getCodigo().equals(codcli)) // Filtra pelas assinaturas do cliente
-                .map(assinatura -> new AssinaturaDTO(
-                        assinatura.getCodigo(),
-                        assinatura.getInicioVigencia(),
-                        assinatura.getFimVigencia(),
-                        assinatura.getPagamentos(),
-                        assinatura.getAplicativo(),
-                        assinatura.getCliente(),
-                        (assinatura.getFimVigencia() != null && new Date().before(assinatura.getFimVigencia())) ? "ATIVA" : "CANCELADA" // Status
-                ))
-                .collect(Collectors.toList());
+                .map(this::toDTO).toList();
     }
 
     public List<AssinaturaDTO> getAssinaturasByAplicativo(Long codapp) {

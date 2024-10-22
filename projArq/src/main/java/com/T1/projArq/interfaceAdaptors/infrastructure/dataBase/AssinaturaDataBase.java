@@ -7,8 +7,11 @@ import com.T1.projArq.domain.model.Pagamento;
 import com.T1.projArq.domain.repository.IAssinaturaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.Date;
 import java.util.List;
 
@@ -22,12 +25,36 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
     }
 
     @Override
+//    public Assinatura create(Assinatura assinatura, Cliente cliente) {
+//        String sql = "INSERT INTO assinaturas (inicio_vigencia, fim_vigencia, aplicativo_codigo, cliente_codigo) VALUES (?, ?, ?, ?)";
+//
+//        jdbcTemplate.update(sql, assinatura.getInicioVigencia(), assinatura.getFimVigencia(), assinatura.getAplicativo().getCodigo(), cliente.getCodigo());
+//        Long codigoAssinatura =
+//        assinatura.setCodigo(codigoAssinatura);
+//        return assinatura;
+//    }
     public Assinatura create(Assinatura assinatura, Cliente cliente) {
         String sql = "INSERT INTO assinaturas (inicio_vigencia, fim_vigencia, aplicativo_codigo, cliente_codigo) VALUES (?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql, assinatura.getInicioVigencia(), assinatura.getFimVigencia(), assinatura.getAplicativo().getCodigo(), cliente.getCodigo());
-//        Long codigoAssinatura = jdbcTemplate.queryForObject("SELECT LIMIT 1 CODIGO FROM assinaturas ORDER BY CODIGO DESC ", Long.class);
-//        assinatura.setCodigo(codigoAssinatura);
+        // Criar um KeyHolder para armazenar a chave gerada
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        // Executar a inserção e capturar a chave gerada
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[] {"codigo"});
+            ps.setDate(1, new java.sql.Date(assinatura.getInicioVigencia().getTime()));
+            ps.setDate(2, new java.sql.Date(assinatura.getFimVigencia().getTime()));
+            ps.setLong(3, assinatura.getAplicativo().getCodigo());
+            ps.setLong(4, cliente.getCodigo());
+            return ps;
+        }, keyHolder);
+
+        // Recuperar o código gerado da assinatura
+        Long codigoAssinatura = keyHolder.getKey().longValue();
+
+        // Definir o código da assinatura
+        assinatura.setCodigo(codigoAssinatura);
+
         return assinatura;
     }
 

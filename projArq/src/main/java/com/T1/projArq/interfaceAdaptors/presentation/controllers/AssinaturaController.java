@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/servcad")
 public class AssinaturaController {
 
     private final AssinaturaService assinaturaService;
@@ -21,7 +20,7 @@ public class AssinaturaController {
     }
 
     // Cria uma assinatura
-    @PostMapping
+    @PostMapping("/servcad/assinaturas")
     public ResponseEntity<AssinaturaDTO> createAssinatura(@RequestBody Map<String, Long> request) {
         Long codCliente = request.get("codigoCliente");
         Long codAplicativo = request.get("codigoAplicativo");
@@ -32,7 +31,7 @@ public class AssinaturaController {
     }
 
     // Obtém todas as assinaturas
-    @GetMapping
+    @GetMapping("/servcad/assinaturas")
     public ResponseEntity<List<AssinaturaDTO>> getAssinaturas() {
         List<AssinaturaDTO> assinaturas = assinaturaService.getAll();
         if (assinaturas.isEmpty()) {
@@ -43,7 +42,7 @@ public class AssinaturaController {
     }
 
     // Obtém assinaturas por tipo (ATIVA/INATIVA)
-    @GetMapping("/assinaturas/{tipo}")
+    @GetMapping("/servcad/assinaturas/{tipo}")
     public ResponseEntity<List<AssinaturaDTO>> getAssinaturasbyType(@PathVariable String tipo) {
         List<AssinaturaDTO> assinaturas = assinaturaService.getAssinaturasByType(tipo.toUpperCase());
 
@@ -54,7 +53,7 @@ public class AssinaturaController {
         return ResponseEntity.ok(assinaturas);
     }
 
-    @GetMapping("/asscli/{codcli}")
+    @GetMapping("/servcad/asscli/{codcli}")
     public ResponseEntity<List<AssinaturaDTO>> getAssinaturasByCliente(@PathVariable Long codcli) {
         List<AssinaturaDTO> assinaturas = assinaturaService.getAssinaturasByCliente(codcli);
 
@@ -64,7 +63,7 @@ public class AssinaturaController {
         return ResponseEntity.ok(assinaturas);
     }
 
-    @GetMapping("/assapp/{codapp}")
+    @GetMapping("/servcad/assapp/{codapp}")
     public ResponseEntity<List<AssinaturaDTO>> getAssinaturasByAplicativo(@PathVariable Long codapp) {
         List<AssinaturaDTO> assinaturas = assinaturaService.getAssinaturasByAplicativo(codapp);
 
