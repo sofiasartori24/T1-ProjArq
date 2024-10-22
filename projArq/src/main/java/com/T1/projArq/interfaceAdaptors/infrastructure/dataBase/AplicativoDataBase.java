@@ -1,4 +1,4 @@
-package com.T1.projArq.infrastructure.dataBase;
+package com.T1.projArq.interfaceAdaptors.infrastructure.dataBase;
 
 import com.T1.projArq.domain.model.Aplicativo;
 import com.T1.projArq.domain.model.Assinatura;

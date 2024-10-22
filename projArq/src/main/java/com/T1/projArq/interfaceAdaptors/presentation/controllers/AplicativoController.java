@@ -1,11 +1,7 @@
-package com.T1.projArq.presentation.controllers;
+package com.T1.projArq.interfaceAdaptors.presentation.controllers;
 
-import com.T1.projArq.aplication.AplicativoService;
-import com.T1.projArq.aplication.ClienteService;
-import com.T1.projArq.aplication.dto.AplicativoDTO;
-import com.T1.projArq.aplication.dto.ClienteDTO;
 import com.T1.projArq.domain.model.Aplicativo;
-import com.T1.projArq.domain.model.Cliente;
+import com.T1.projArq.domain.services.AplicativoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
