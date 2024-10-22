@@ -189,17 +189,7 @@ public class AssinaturaService {
     public List<AssinaturaDTO> getAssinaturasByAplicativo(Long codapp) {
         List<Assinatura> assinaturas = assinaturaDataBase.getByAplicativoId(codapp);
 
-        return assinaturas.stream()
-                .map(assinatura -> new AssinaturaDTO(
-                        assinatura.getCodigo(),
-                        assinatura.getInicioVigencia(),
-                        assinatura.getFimVigencia(),
-                        assinatura.getPagamentos(),
-                        assinatura.getAplicativo(),
-                        assinatura.getCliente(),
-                        (assinatura.getFimVigencia() != null && new Date().before(assinatura.getFimVigencia())) ? "ATIVA" : "CANCELADA" // Status
-                ))
-                .collect(Collectors.toList());
+      return assinaturas.stream().map(this::toDTO).toList();
     }
 
 
@@ -208,4 +198,17 @@ public class AssinaturaService {
 
         return assinatura.getFimVigencia() != null && new Date().before(assinatura.getFimVigencia()) ? true : false;
     }
+
+    private AssinaturaDTO toDTO(Assinatura assinatura) {
+        return new AssinaturaDTO(
+                assinatura.getCodigo(),
+                assinatura.getInicioVigencia(),
+                assinatura.getFimVigencia(),
+                assinatura.getPagamentos(),
+                assinatura.getAplicativo(),
+                assinatura.getCliente(),
+                (assinatura.getFimVigencia() != null && new Date().before(assinatura.getFimVigencia())) ? "ATIVA" : "CANCELADA" // Status
+        );
+    }
 }
+
