@@ -1,5 +1,6 @@
 package com.T1.projArq.domain.services;
 
+import com.T1.projArq.application.dto.ClienteDTO;
 import com.T1.projArq.domain.model.Cliente;
 import com.T1.projArq.domain.repository.IAplicativoRepository;
 import com.T1.projArq.domain.repository.IAssinaturaRepository;
@@ -29,8 +30,9 @@ public class ClienteService {
     }
 
     // Recupera todos os clientes
-    public List<Cliente> getAllClientes() {
-        return clienteRepository.getAll();
+    public List<ClienteDTO> getAllClientes() {
+        List<Cliente> clientes = clienteRepository.getAll();
+        return clientes.stream().map(this::toDTO).toList();
     }
 
     // Recupera um cliente por id
@@ -48,5 +50,8 @@ public class ClienteService {
         clienteRepository.delete(codigo);
     }
 
+    private ClienteDTO toDTO(Cliente cliente) {
+        return new ClienteDTO(cliente.getCodigo(), cliente.getNome(), cliente.getEmail(), cliente.getAssinaturas());
+    }
 }
 

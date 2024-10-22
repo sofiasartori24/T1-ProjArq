@@ -1,5 +1,6 @@
 package com.T1.projArq.interfaceAdaptors.presentation.controllers;
 
+import com.T1.projArq.application.dto.ClienteDTO;
 import com.T1.projArq.domain.model.Cliente;
 import com.T1.projArq.domain.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class ClienteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> getAllClientes() {
-        List<Cliente> clientes = clienteService.getAllClientes();
+    public ResponseEntity<List<ClienteDTO>> getAllClientes() {
+        List<ClienteDTO> clientes = clienteService.getAllClientes();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 }
