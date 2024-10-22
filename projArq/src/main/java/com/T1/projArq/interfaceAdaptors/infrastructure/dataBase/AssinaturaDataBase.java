@@ -50,6 +50,23 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
         });
     }
 
+    public List<Assinatura> getAssinaturaByClienteId(Long clienteId) {
+        String sql = "SELECT * FROM assinaturas WHERE cliente_codigo = ?";
+        return jdbcTemplate.query(sql, new Object[]{clienteId}, (rs, rowNum) -> {
+            Long codigo = rs.getLong("codigo");
+            Date inicioVigencia = rs.getDate("inicio_vigencia");
+            Date fimVigencia = rs.getDate("fim_vigencia");
+            Long aplicativoId = rs.getLong("aplicativo_codigo");
+
+            Cliente cliente = getClienteById(clienteId);
+            Aplicativo aplicativo = getAplicativoById(aplicativoId);
+            Assinatura assinatura = new Assinatura(codigo, inicioVigencia, fimVigencia, aplicativo, cliente);
+            assinatura.setFimVigencia(fimVigencia);
+
+            return assinatura;
+        });
+    }
+
     @Override
     public Assinatura getById(Long codigo) {
         String sql = "SELECT * FROM assinaturas WHERE codigo = ?";
@@ -68,6 +85,7 @@ public class AssinaturaDataBase implements IAssinaturaRepository {
         });
     }
 
+    @Override
     public List<Assinatura> getByAplicativoId(Long aplicativoId) {
         String sql = "SELECT * FROM assinaturas WHERE aplicativo_codigo = ?";
         return jdbcTemplate.query(sql, new Object[]{aplicativoId}, (rs, rowNum) -> {
