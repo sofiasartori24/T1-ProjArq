@@ -1,6 +1,9 @@
 package com.T1.projArq.domain.model;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class Assinatura {
     private Long codigo;

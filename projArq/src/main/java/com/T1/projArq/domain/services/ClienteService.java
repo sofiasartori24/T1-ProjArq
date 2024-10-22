@@ -1,15 +1,13 @@
-package com.T1.projArq.aplication;
+package com.T1.projArq.domain.services;
 
-import com.T1.projArq.domain.model.Aplicativo;
-import com.T1.projArq.domain.model.Assinatura;
+import com.T1.projArq.application.dto.ClienteDTO;
 import com.T1.projArq.domain.model.Cliente;
 import com.T1.projArq.domain.repository.IAplicativoRepository;
 import com.T1.projArq.domain.repository.IAssinaturaRepository;
 import com.T1.projArq.domain.repository.IClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,8 +30,9 @@ public class ClienteService {
     }
 
     // Recupera todos os clientes
-    public List<Cliente> getAllClientes() {
-        return clienteRepository.getAll();
+    public List<ClienteDTO> getAllClientes() {
+        List<Cliente> clientes = clienteRepository.getAll();
+        return clientes.stream().map(this::toDTO).toList();
     }
 
     // Recupera um cliente por id
@@ -51,5 +50,8 @@ public class ClienteService {
         clienteRepository.delete(codigo);
     }
 
+    private ClienteDTO toDTO(Cliente cliente) {
+        return new ClienteDTO(cliente.getCodigo(), cliente.getNome(), cliente.getEmail(), cliente.getAssinaturas());
+    }
 }
 

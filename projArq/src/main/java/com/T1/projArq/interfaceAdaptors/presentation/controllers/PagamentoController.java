@@ -1,8 +1,8 @@
-package com.T1.projArq.presentation.controllers;
+package com.T1.projArq.interfaceAdaptors.presentation.controllers;
 
-import com.T1.projArq.aplication.PagamentoService;
 import com.T1.projArq.application.dto.PagamentoDTO;
 import com.T1.projArq.domain.model.Pagamento;
+import com.T1.projArq.domain.services.PagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +38,8 @@ public class PagamentoController {
 
     // Obtém todos os pagamentos
     @GetMapping
-    public ResponseEntity<List<Pagamento>> getAllPagamentos() {
-        List<Pagamento> pagamentos = pagamentoService.getAll();
+    public ResponseEntity<List<PagamentoDTO>> getAllPagamentos() {
+        List<PagamentoDTO> pagamentos = pagamentoService.getAll();
         if (pagamentos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -48,8 +48,8 @@ public class PagamentoController {
 
     // Obtém um pagamento por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Pagamento> getPagamentoById(@PathVariable Long id) {
-        Pagamento pagamento = pagamentoService.getById(id);
+    public ResponseEntity<PagamentoDTO> getPagamentoById(@PathVariable Long id) {
+        PagamentoDTO pagamento = pagamentoService.getById(id);
         if (pagamento == null) {
             return ResponseEntity.notFound().build();
         }

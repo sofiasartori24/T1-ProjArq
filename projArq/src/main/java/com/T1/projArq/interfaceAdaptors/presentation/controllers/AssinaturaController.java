@@ -1,6 +1,6 @@
 package com.T1.projArq.interfaceAdaptors.presentation.controllers;
 
-import com.T1.projArq.aplication.dto.AssinaturaDTO;
+import com.T1.projArq.application.dto.AssinaturaDTO;
 import com.T1.projArq.domain.services.AssinaturaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +57,16 @@ public class AssinaturaController {
     @GetMapping("/asscli/{codcli}")
     public ResponseEntity<List<AssinaturaDTO>> getAssinaturasByCliente(@PathVariable Long codcli) {
         List<AssinaturaDTO> assinaturas = assinaturaService.getAssinaturasByCliente(codcli);
+
+        if (assinaturas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(assinaturas);
+    }
+
+    @GetMapping("/assapp/{codapp}")
+    public ResponseEntity<List<AssinaturaDTO>> getAssinaturasByAplicativo(@PathVariable Long codapp) {
+        List<AssinaturaDTO> assinaturas = assinaturaService.getAssinaturasByAplicativo(codapp);
 
         if (assinaturas.isEmpty()) {
             return ResponseEntity.noContent().build();

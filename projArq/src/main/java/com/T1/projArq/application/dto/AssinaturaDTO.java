@@ -1,4 +1,4 @@
-package com.T1.projArq.aplication.dto;
+package com.T1.projArq.application.dto;
 
 import com.T1.projArq.domain.model.Aplicativo;
 import com.T1.projArq.domain.model.Cliente;

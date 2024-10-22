@@ -8,6 +8,13 @@ public class PagamentoDTO {
     private Date dataPagamento;
     private String promocao;
 
+    public PagamentoDTO(Long assinaturaId, Double valorPago, Date dataPagamento, String promocao) {
+        this.assinaturaId = assinaturaId;
+        this.valorPago = valorPago;
+        this.dataPagamento = dataPagamento;
+        this.promocao = promocao;
+    }
+
     public Long getAssinaturaId() {
         return assinaturaId;
     }

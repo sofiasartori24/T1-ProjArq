@@ -56,7 +56,8 @@ INSERT INTO clientes (codigo, nome, email) VALUES
                                                (7, 'Bruno Pereira', 'bruno.pereira@example.com'),
                                                (8, 'Juliana Ribeiro', 'juliana.ribeiro@example.com'),
                                                (9, 'Ricardo Gomes', 'ricardo.gomes@example.com'),
-                                               (10, 'Tatiane Martins', 'tatiane.martins@example.com');
+                                               (10, 'Tatiane Martins', 'tatiane.martins@example.com'),
+                                               (11, 'Carlos Souza', 'carlos.souza@example.com');
 
 -- Inserções de Aplicativos
 INSERT INTO aplicativos (codigo, nome, custo_mensal) VALUES
@@ -73,4 +74,10 @@ INSERT INTO assinaturas (inicio_vigencia, fim_vigencia, aplicativo_codigo, clien
 ('2024-03-01', '2025-03-01', 3, 3),
 ('2024-04-01', '2025-04-01', 4, 4),
 ('2024-05-01', '2025-05-01', 5, 5),
-('2024-05-01', '2024-06-01', 5, 5);
+('2024-05-01', '2024-06-01', 5, 5),
+('2024-06-01', '2025-06-01', 5, 6),
+('2024-07-01', '2025-07-01', 5, 7),
+('2024-08-01', '2025-08-01', 5, 8),
+('2024-09-01', '2025-09-01', 5, 9),
+('2024-10-01', '2025-10-01', 5, 10),
+('2024-11-01', '2025-11-01', 5, 11);

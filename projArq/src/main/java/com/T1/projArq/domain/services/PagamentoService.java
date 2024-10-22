@@ -1,5 +1,6 @@
-package com.T1.projArq.aplication;
+package com.T1.projArq.domain.services;
 
+import com.T1.projArq.application.dto.PagamentoDTO;
 import com.T1.projArq.domain.model.Assinatura;
 import com.T1.projArq.domain.model.Pagamento;
 import com.T1.projArq.domain.repository.IAssinaturaRepository;
@@ -80,12 +81,24 @@ public class PagamentoService {
     }
 
     // Método para obter todos os pagamentos
-    public List<Pagamento> getAll() {
-        return pagamentoRepository.getAll();
+    public List<PagamentoDTO> getAll() {
+        List<Pagamento> pagamentos = pagamentoRepository.getAll();
+
+        // Converte a lista de pagamentos para uma lista de DTOs
+        return pagamentos.stream().map(this::toDTO).toList();
+
     }
 
     // Método para obter um pagamento por id
-    public Pagamento getById(Long codigo) {
-        return pagamentoRepository.getById(codigo);
+    public PagamentoDTO getById(Long codigo) {
+        Pagamento pagamento = pagamentoRepository.getById(codigo);
+        if (pagamento == null) {
+            return null;
+        }
+        return toDTO(pagamento);
+    }
+
+    private PagamentoDTO toDTO(Pagamento pagamento) {
+        return new PagamentoDTO(pagamento.getCodigo(), pagamento.getValorPago(), pagamento.getDataPagamento(), pagamento.getPromocao());
     }
 }

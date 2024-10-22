@@ -1,15 +1,12 @@
 package com.T1.projArq.domain.services;
 
-import com.T1.projArq.aplication.AplicativoService;
-import com.T1.projArq.aplication.ClienteService;
-import com.T1.projArq.aplication.dto.AssinaturaDTO;
+import com.T1.projArq.application.dto.AssinaturaDTO;
 import com.T1.projArq.domain.model.Aplicativo;
 import com.T1.projArq.domain.model.Assinatura;
 import com.T1.projArq.domain.model.Cliente;
 import com.T1.projArq.interfaceAdaptors.infrastructure.dataBase.AssinaturaDataBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.Calendar;
 import java.util.Date;
@@ -20,8 +17,8 @@ import java.util.stream.Collectors;
 public class AssinaturaService {
 
     private final AssinaturaDataBase assinaturaDataBase;
-    private final com.T1.projArq.aplication.ClienteService clienteService;
-    private final com.T1.projArq.aplication.AplicativoService aplicativoService;
+    private final ClienteService clienteService;
+    private final AplicativoService aplicativoService;
 
     @Autowired
     public AssinaturaService(AssinaturaDataBase assinaturaDataBase, ClienteService clienteService, AplicativoService aplicativoService) {
@@ -189,9 +186,29 @@ public class AssinaturaService {
                 .collect(Collectors.toList());
     }
 
+    public List<AssinaturaDTO> getAssinaturasByAplicativo(Long codapp) {
+        List<Assinatura> assinaturas = assinaturaDataBase.getByAplicativoId(codapp);
+
+      return assinaturas.stream().map(this::toDTO).toList();
+    }
+
+
     public Boolean isAssinaturaAtiva(Long codass) {
         Assinatura assinatura = assinaturaDataBase.getById(codass);
 
         return assinatura.getFimVigencia() != null && new Date().before(assinatura.getFimVigencia()) ? true : false;
     }
+
+    private AssinaturaDTO toDTO(Assinatura assinatura) {
+        return new AssinaturaDTO(
+                assinatura.getCodigo(),
+                assinatura.getInicioVigencia(),
+                assinatura.getFimVigencia(),
+                assinatura.getPagamentos(),
+                assinatura.getAplicativo(),
+                assinatura.getCliente(),
+                (assinatura.getFimVigencia() != null && new Date().before(assinatura.getFimVigencia())) ? "ATIVA" : "CANCELADA" // Status
+        );
+    }
 }
+
