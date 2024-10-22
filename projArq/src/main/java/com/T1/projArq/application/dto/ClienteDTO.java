@@ -1,4 +1,4 @@
-package com.T1.projArq.aplication.dto;
+package com.T1.projArq.application.dto;
 
 public class ClienteDTO {
     private Long codigo;

@@ -1,4 +1,4 @@
-package com.T1.projArq.aplication;
+package com.T1.projArq.domain.services;
 
 import com.T1.projArq.domain.model.Assinatura;
 import com.T1.projArq.domain.model.Pagamento;

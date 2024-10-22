@@ -1,15 +1,12 @@
-package com.T1.projArq.aplication;
+package com.T1.projArq.domain.services;
 
-import com.T1.projArq.domain.model.Aplicativo;
-import com.T1.projArq.domain.model.Assinatura;
 import com.T1.projArq.domain.model.Cliente;
 import com.T1.projArq.domain.repository.IAplicativoRepository;
 import com.T1.projArq.domain.repository.IAssinaturaRepository;
 import com.T1.projArq.domain.repository.IClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service

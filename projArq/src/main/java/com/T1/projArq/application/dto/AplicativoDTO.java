@@ -1,8 +1,7 @@
-package com.T1.projArq.aplication.dto;
+package com.T1.projArq.application.dto;
 
 import com.T1.projArq.domain.model.Assinatura;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AplicativoDTO {
