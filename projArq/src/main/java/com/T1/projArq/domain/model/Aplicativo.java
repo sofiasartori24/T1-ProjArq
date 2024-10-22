@@ -28,6 +28,10 @@ public class Aplicativo {
         return this.custoMensal;
     }
 
+    public List<Assinatura> getAssinaturas() {
+        return this.assinaturas;
+    }
+
     public void setCustoMensal(Double custoMensal) {
         this.custoMensal = custoMensal;
     }

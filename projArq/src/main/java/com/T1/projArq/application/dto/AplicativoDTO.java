@@ -10,6 +10,13 @@ public class AplicativoDTO {
     private Double custoMensal;
     private List<Assinatura> assinaturas;
 
+    public AplicativoDTO(Long codigo, String nome, Double custoMensal, List<Assinatura> assinaturas) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.custoMensal = custoMensal;
+        this.assinaturas = assinaturas;
+    }
+
     public Long getCodigo() {
         return this.codigo;
     }
